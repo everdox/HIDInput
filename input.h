@@ -57,7 +57,6 @@ typedef void*(_fastcall *PsGetProcessPeb)(PEPROCESS a1);
 typedef void*(_fastcall *PsGetProcessWow64Process)(PEPROCESS a1);
 
 extern NTSTATUS SystemRoutine();
-extern void EnableWriteProtect();
 
 
 PDEVICE_OBJECT mouTarget;
