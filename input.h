@@ -93,6 +93,12 @@ PKEYBOARD_INPUT_DATA mjRead=NULL;
 PMOUSE_INPUT_DATA mouIrp=NULL;
 
 
+/*
+This function calls the KeyboardServiceCallbackRoutine given to us after we added our device,
+via the internal device request. Before branching to the actual input routine, we must raise 
+our IRQL to dispatch level because we are pretending that is is a dpcforisr routine, not to mention 
+these routines acquire dispatch level spinlocks without checking or modifying the previous IRQL.
+*/
 void SynthesizeKeyboard(PKEYBOARD_INPUT_DATA a1)
 {
 	KIRQL irql;
@@ -114,7 +120,12 @@ void SynthesizeKeyboard(PKEYBOARD_INPUT_DATA a1)
 	KeLowerIrql(irql);
 
 }
-
+/*
+This function calls the MouseServiceCallbackRoutine given to us after we added our device,
+via the internal device request. Before branching to the actual input routine, we must raise 
+our IRQL to dispatch level because we are pretending that is is a dpcforisr routine, not to mention 
+these routines acquire dispatch level spinlocks without checking or modifying the previous IRQL.
+*/
 void SynthesizeMouse(PMOUSE_INPUT_DATA a1)
 {
 	KIRQL irql;
@@ -136,6 +147,11 @@ void SynthesizeMouse(PMOUSE_INPUT_DATA a1)
 
 }
 
+/*
+This function asynchronously obtains the up/down keystate of the corresponding scan code.
+This global array is updated each time the user presses a key, it is updated via the hijacked 
+InputApc queued to the CSRSS keyboard listener whenever the completion code calls IoCompleteRequest
+*/
 int GetKeyState(char scan)
 {
 	if(KEY_DATA[scan-1]) return 1;
@@ -143,6 +159,11 @@ int GetKeyState(char scan)
 	return 0;
 }
 
+/*
+This function asynchronously obtains the up/down mouse button state of the corresponding mouse button.
+This global array is updated each time the user presses a mouse button, it is updated via the hijacked 
+InputApc queued to the CSRSS mouse listener whenever the completion code calls IoCompleteRequest
+*/
 int GetMouseState(int key)
 {
 	if(MOU_DATA[key]) return 1;
@@ -150,6 +171,11 @@ int GetMouseState(int key)
 	return 0;
 }
 
+/*
+This is just an easy to use wrapper around MmCopyVirtualMemory, as you can see a TargetProcess is required
+or the call will just fail. Since MmCopyVirtualMemory contains it's own exception handling and data probes, 
+the call will fail if the source is bogus.
+*/
 NTSTATUS ReadMemory(void *source, void *target, ULONGLONG size)
 {
 	ULONG transferred;
@@ -160,7 +186,10 @@ NTSTATUS ReadMemory(void *source, void *target, ULONGLONG size)
 
 }
 
-
+/*
+This is a wrapper around KeDelayExecutionThread. Since KeyDelayExecutionThread takes an input of 100ns units, we convert 
+our ms input, and use a negative value for relative time.
+*/
 
 NTSTATUS Sleep(ULONGLONG milliseconds)
 {
@@ -204,7 +233,10 @@ struct SYSTEM_PROCESS_INFORMATION
 
 //we could walk vads but since ldr_data's appearance on msdn it is less likely to change. 
 
-
+/*
+This is a very nasty function to retrieve the linear address of the specified module. It walks the PEB loader
+lists of the target process and resolves the specified module name to a linear address. 
+*/
 NTSTATUS GetModuleBase(wchar_t *ModuleName, ULONGLONG *base)
 {
 	ULONGLONG ldr;
@@ -320,6 +352,11 @@ NTSTATUS GetModuleBase(wchar_t *ModuleName, ULONGLONG *base)
 	return STATUS_INVALID_PARAMETER_1;
 }
 
+/*
+This function uses ZwQuerySystemInformation and PsLookupProcessByProcessId to resolve the EPROCESS for the specified 
+image name.
+*/
+
 NTSTATUS AttachToProcess(char *ImageName)
 {
 
@@ -394,7 +431,9 @@ NTSTATUS AttachToProcess(char *ImageName)
 }
 
 
-
+/*
+These are the hooks for win32k!InputApc which filter mouse and keyboard
+*/
 
 NTSTATUS KeyboardApc(void *a1, void *a2, void *a3, void *a4, void *a5)
 {
