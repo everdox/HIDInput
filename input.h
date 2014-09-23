@@ -39,12 +39,17 @@ struct DEVOBJ_EXTENSION_FIX
 	PDEVICE_OBJECT AttachedTo;
 };
 
+/*
+These routines are resolved after an adddevice call to mouclass and kbdclass.
 
+MouClass and KbdClass then respond with a KBDCLASS_CONNECT_REQUEST or MOUCLASS_CONNECT_REQUEST as an internal 
+device request, giving us the linear address of the input functions. We then call them just like a real miniport driver
+would ;p
+*/
 typedef void(__fastcall *MouseServiceDpc)(PDEVICE_OBJECT mou, PMOUSE_INPUT_DATA a1, PMOUSE_INPUT_DATA a2, PULONG a3);
 typedef void(__fastcall *KeyboardServiceDpc)(PDEVICE_OBJECT kbd, PKEYBOARD_INPUT_DATA a1, PKEYBOARD_INPUT_DATA a2, PULONG a3);
 
 
-typedef NTSTATUS(__fastcall *MiProcessLoaderEntry)(void *ldr_entry, int remove);
 typedef NTSTATUS(__fastcall *MouseAddDevice)(PDRIVER_OBJECT a1, PDEVICE_OBJECT a2);
 typedef NTSTATUS(__fastcall *KeyboardAddDevice)(PDRIVER_OBJECT a1, PDEVICE_OBJECT a2);
 typedef NTSTATUS(__fastcall *MmCopyVirtualMemory)(PEPROCESS a1, void *a2, PEPROCESS *a3, void *a4, ULONGLONG a5, KPROCESSOR_MODE a6, ULONG *a7);
