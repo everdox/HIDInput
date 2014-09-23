@@ -432,7 +432,9 @@ NTSTATUS AttachToProcess(char *ImageName)
 
 
 /*
-These are the hooks for win32k!InputApc which filter mouse and keyboard
+These are the hooks for win32k!InputApc which filter mouse and keyboard. ReadInstrumentation modifies the 
+completion KAPC by hooking mouclass and kbdclass MJ_READ routines. This is how HID/8042 input is monitored. Yes 
+this is nasty, but afaik only i8042 provides functions for filtering. The user could have 8042 or USB, or both.
 */
 
 NTSTATUS KeyboardApc(void *a1, void *a2, void *a3, void *a4, void *a5)
@@ -498,6 +500,11 @@ NTSTATUS MouseApc(void *a1, void *a2, void *a3, void *a4, void *a5)
 	return MouseInputRoutine(a1,a2,a3,a4,a5);
 }
 
+/*
+These routines hijack the IRP's kapc for keyboard and mouse input respectively.
+
+*/
+
 NTSTATUS ReadInstrumentation(PDEVICE_OBJECT device, PIRP irp)
 {
 	ULONGLONG *routine;
@@ -542,6 +549,12 @@ NTSTATUS ReadInstrumentation1(PDEVICE_OBJECT device, PIRP irp)
 
 NTSTATUS Edox_InvalidRequest(PDEVICE_OBJECT device, PIRP irp);
 
+
+/*
+This routine serves to respond to the connect request from kbdclass/mouclass after an
+adddevice call. The corresponding DPC routines are then saved in the global pointers described above.
+*/
+
 NTSTATUS Edox_InternalIoctl(PDEVICE_OBJECT device, PIRP irp)
 {
 	PIO_STACK_LOCATION ios;
@@ -574,6 +587,11 @@ NTSTATUS Edox_InvalidRequest(PDEVICE_OBJECT device, PIRP irp)
 	return STATUS_SUCCESS;	
 }
 
+
+/*
+This function recursively searches for a devnode to hijack in a device stack, this is so we can properly call 
+mouclass/kbdclass and pretend we are an actual HID provider.
+*/
 
 void *FindDevNodeRecurse(PDEVICE_OBJECT a1, ULONGLONG *a2)
 {
