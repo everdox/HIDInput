@@ -31,7 +31,7 @@ GetModuleBase(wchar_t *moduleName, ULONGLONG *base) - obtains the linear base ad
 successfully called AttachToProcess() or this function will fail.
 
 ReadMemory(void *source, void *target, ULONGLONG size) - Speaks for itself I hope. You must have previously and successfully called AttachToProcess() 
-or this function will fail.
+or this function will fail. 
 
 SynthesizeMouse(PMOUSE_INPUT_DATA a1) - Synthesizes the corresponding mouse input.
 
