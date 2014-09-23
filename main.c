@@ -12,8 +12,9 @@
     You should have received a copy of the GNU General Public License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-#include "input.h"
 */
+#include "input.h"
+
 
 //////////////////////////////////
 //                               //
@@ -51,7 +52,7 @@ GetMouseState(int key) - Asynchronously retrieves the up or down state of the sp
 
 
 
-NSTATUS SystemRoutine()
+NTSTATUS SystemRoutine()
 {
 	//DO YOUR WORK HERE:
 
