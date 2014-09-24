@@ -27,6 +27,7 @@
 
 
 
+
 struct DEVOBJ_EXTENSION_FIX
 {
 	USHORT type;
