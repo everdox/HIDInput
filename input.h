@@ -590,7 +590,8 @@ NTSTATUS Edox_InvalidRequest(PDEVICE_OBJECT device, PIRP irp)
 
 /*
 This function recursively searches for a devnode to hijack in a device stack, this is so we can properly call 
-mouclass/kbdclass and pretend we are an actual HID provider.
+mouclass/kbdclass and pretend we are an actual HID provider. This is just a giant hack and our driver should 
+really be part of the USB stack.
 */
 
 void *FindDevNodeRecurse(PDEVICE_OBJECT a1, ULONGLONG *a2)
