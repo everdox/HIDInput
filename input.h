@@ -96,7 +96,7 @@ PMOUSE_INPUT_DATA mouIrp=NULL;
 /*
 This function calls the KeyboardClassServiceCallback routine given to us after we added our device,
 via the internal device request. Before branching to the actual input routine, we must raise 
-our IRQL to dispatch level because we are pretending that is is a dpcforisr routine, not to mention 
+our IRQL to dispatch level because we are pretending that it is a dpcforisr routine, not to mention 
 these routines acquire dispatch level spinlocks without checking or modifying the previous IRQL.
 */
 void SynthesizeKeyboard(PKEYBOARD_INPUT_DATA a1)
@@ -123,7 +123,7 @@ void SynthesizeKeyboard(PKEYBOARD_INPUT_DATA a1)
 /*
 This function calls the MouseClassServiceCallback routine given to us after we added our device,
 via the internal device request. Before branching to the actual input routine, we must raise 
-our IRQL to dispatch level because we are pretending that is is a dpcforisr routine, not to mention 
+our IRQL to dispatch level because we are pretending that it is a dpcforisr routine, not to mention 
 these routines acquire dispatch level spinlocks without checking or modifying the previous IRQL.
 */
 void SynthesizeMouse(PMOUSE_INPUT_DATA a1)
