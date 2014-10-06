@@ -53,8 +53,8 @@ GetMouseState(int key) - Asynchronously retrieves the up or down state of the sp
 
 
 
-#define BaseEntity 0xA187EC
-#define EntityList 0xA894F4
+#define BaseEntity 0xA58734
+#define EntityList 0x49fa8f4
 #define EntityListDistance 0x10
 
 #define inCross 0x23d8
