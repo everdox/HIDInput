@@ -633,8 +633,6 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT driverObject, IN PUNICODE_STRING regPath)
 	CLIENT_ID nthread;
 	PKTHREAD p=NULL;
 	PEXCEPTION_POINTERS ptr;
-	
-	MiProcessLoaderEntry MiRemoveLoaderEntry=NULL;
 
 
 	/*==============================*/
