@@ -166,13 +166,20 @@ NTSTATUS SystemRoutine()
 	
 	ULONGLONG base;
 	ULONG trigger;
-	int active=0;
+	int active=1;
 	ULONGLONG page=0;
 	
 	
 	mdata.Flags|=MOUSE_MOVE_RELATIVE; 
 
 
+
+	//Use these scan codes for GetKeyState()
+	//
+	//http://msdn.microsoft.com/en-us/library/aa299374%28v=vs.60%29.aspx
+
+
+	
 
 
 	
@@ -186,7 +193,7 @@ NTSTATUS SystemRoutine()
 #define __P 25//reacquire
 		#define  __V 47
 
-		if(GetMouseState(1))
+		if(GetKeyState(25))
 		{
 			
 
@@ -195,7 +202,7 @@ NTSTATUS SystemRoutine()
 			GetModuleBase(L"client.dll",&base);
 		}
 
-		active=1;
+
 
 		if(active)
 		{
