@@ -174,13 +174,6 @@ NTSTATUS SystemRoutine()
 
 
 
-	//Use these scan codes for GetKeyState()
-	//
-	//http://msdn.microsoft.com/en-us/library/aa299374%28v=vs.60%29.aspx
-
-
-	
-
 
 	
 	
