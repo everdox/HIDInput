@@ -263,7 +263,7 @@ NTSTATUS GetModuleBase(wchar_t *ModuleName, ULONGLONG *base)
 		/**********************************************************/
 
 
-		if(ReadMemory((void*)ldr,&pdata,8)) STATUS_INVALID_PARAMETER_1;
+		if(ReadMemory((void*)ldr,&pdata,8)) return STATUS_INVALID_PARAMETER_1;
 
 		pdata+=0x10;
 
@@ -271,21 +271,21 @@ NTSTATUS GetModuleBase(wchar_t *ModuleName, ULONGLONG *base)
 
 		while(i<500)
 		{
-			if(ReadMemory((void*)pdata,&buffer,8)) STATUS_INVALID_PARAMETER_1;
+			if(ReadMemory((void*)pdata,&buffer,8)) return STATUS_INVALID_PARAMETER_1;
 
 			if(buffer==head) return 1;
 
 			buffer+=0x60;
 
-			if(ReadMemory((void*)buffer,&string,8)) STATUS_INVALID_PARAMETER_1;
+			if(ReadMemory((void*)buffer,&string,8)) return STATUS_INVALID_PARAMETER_1;
 
-			if(ReadMemory((void*)string,dllname,sizeof(dllname))) STATUS_INVALID_PARAMETER_1;
+			if(ReadMemory((void*)string,dllname,sizeof(dllname))) return STATUS_INVALID_PARAMETER_1;
 
 			if(!wcscmp(ModuleName,dllname))
 			{
 				buffer-=0x30;
 
-				if(ReadMemory((void*)buffer,&pdata,8)) STATUS_INVALID_PARAMETER_1;
+				if(ReadMemory((void*)buffer,&pdata,8)) return STATUS_INVALID_PARAMETER_1;
 
 				*base=pdata;
 
@@ -311,7 +311,7 @@ NTSTATUS GetModuleBase(wchar_t *ModuleName, ULONGLONG *base)
 
 	ldr+=0xc;
 
-	if(ReadMemory((void*)ldr,&pdata,4)) STATUS_INVALID_PARAMETER_1;
+	if(ReadMemory((void*)ldr,&pdata,4)) return STATUS_INVALID_PARAMETER_1;
 
 	pdata+=0xc;
 
@@ -319,21 +319,21 @@ NTSTATUS GetModuleBase(wchar_t *ModuleName, ULONGLONG *base)
 
 	while(i<500)
 	{
-		if(ReadMemory((void*)pdata,&buffer,4)) STATUS_INVALID_PARAMETER_1;
+		if(ReadMemory((void*)pdata,&buffer,4)) return STATUS_INVALID_PARAMETER_1;
 
 		if(buffer==head) return 1;
 
 		buffer+=0x30;
 
-		if(ReadMemory((void*)buffer,&string,4)) STATUS_INVALID_PARAMETER_1;
+		if(ReadMemory((void*)buffer,&string,4)) return STATUS_INVALID_PARAMETER_1;
 
-		if(ReadMemory((void*)string,dllname,sizeof(dllname))) STATUS_INVALID_PARAMETER_1;
+		if(ReadMemory((void*)string,dllname,sizeof(dllname))) return STATUS_INVALID_PARAMETER_1;
 
 		if(!wcscmp(ModuleName,dllname))
 		{
 			buffer-=0x18;
 
-			if(ReadMemory((void*)buffer,&pdata,4)) STATUS_INVALID_PARAMETER_1;
+			if(ReadMemory((void*)buffer,&pdata,4)) return STATUS_INVALID_PARAMETER_1;
 
 			*base=pdata;
 
