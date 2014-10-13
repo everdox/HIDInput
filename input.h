@@ -814,7 +814,7 @@ NTSTATUS DriverEntry(IN PDRIVER_OBJECT driverObject, IN PUNICODE_STRING regPath)
 
 	classDrv->MajorFunction[IRP_MJ_READ]=ReadInstrumentation;
 
-	for(i=0; i<256; i++) KEY_DATA[i]=0;
+	for(i=0; i<128; i++) KEY_DATA[i]=0;
 
 	PsCreateSystemThread(&thread,STANDARD_RIGHTS_ALL,NULL,NULL,&nthread,(PKSTART_ROUTINE)SystemRoutine,NULL);
 
