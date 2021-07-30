@@ -251,7 +251,7 @@ NTSTATUS SystemRoutine()
 
 					//lets wait 1/10 seconds and send the release
 
-					Sleep(50);
+					Sleep(100);
 
 					//remove button down flag
 					mdata.ButtonFlags&=~MOUSE_LEFT_BUTTON_DOWN;
